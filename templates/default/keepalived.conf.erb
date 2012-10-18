@@ -48,6 +48,10 @@ vrrp_instance <%= name.upcase %> {
   <% if instance['advert_int'] -%>
   advert_int <%= instance['advert_int'] %>
   <% end -%>
+  <% if instance['lvs_sync_daemon_interface'] -%>
+  lvs_sync_daemon_interface <%= instance['lvs_sync_daemon_interface'] %>
+  <% end -%>
+
   <% if instance['auth_type'] -%>
   authentication {
     auth_type <%= instance['auth_type'].to_s.upcase %>
