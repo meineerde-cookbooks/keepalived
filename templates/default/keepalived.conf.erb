@@ -20,6 +20,17 @@ vrrp_script <%= name %> {
 }
 <% end %>
 
+<% node['keepalived']['instance_groups'].each_pair do |name, instances| -%>
+<% next if instances.empty? -%>
+vrrp_sync_group <%= name.upcase %> {
+   group {
+      <% instances.each do |instance| -%>
+      <%= instance.upcase %>
+      <% end -%>
+   }
+}
+<% end -%>
+
 <% node['keepalived']['instances'].each_pair do |name, instance| -%>
 <%
   instance['states'] ||= {}
