@@ -51,6 +51,9 @@ vrrp_instance <%= name.upcase %> {
   <% if instance['lvs_sync_daemon_interface'] -%>
   lvs_sync_daemon_interface <%= instance['lvs_sync_daemon_interface'] %>
   <% end -%>
+  <% if instance['mcast_src_addr'] -%>
+  mcast_src_addr <%= instance['mcast_src_addr'] %>
+  <% end -%>
 
   <% if instance['auth_type'] -%>
   authentication {
