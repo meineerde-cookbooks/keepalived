@@ -38,8 +38,36 @@ template "keepalived.conf" do
   mode 0644
 end
 
-service "keepalived" do
-  supports :restart => true, :status => true
-  action [:enable, :start]
-  subscribes :restart, "template[keepalived.conf]"
+case node["keepalived"]["init_style"]
+when "init"
+  template "/etc/init.d/keepalived" do
+    source "init.erb"
+
+    owner "root"
+    group "root"
+    mode "0755"
+  end
+
+  service "keepalived" do
+    supports :restart => true, :status => true
+    action [:enable, :start]
+    subscribes :restart, "template[keepalived.conf]"
+  end
+when "runit"
+  service "keepalived_init" do
+    service_name "keepalived"
+    pattern "keepalived"
+    action [:stop, :disable]
+  end
+
+  include_recipe "runit"
+  runit_service "keepalived" do
+    owner "root"
+    group "root"
+
+    default_logger true
+
+    action [:enable, :start]
+    subscribes :hup, "template[keepalived.conf]"
+  end
 end

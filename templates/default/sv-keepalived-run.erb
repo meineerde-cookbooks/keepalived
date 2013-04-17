@@ -1,0 +1,8 @@
+#!/bin/sh
+TMPFILES="/tmp/.vrrp /tmp/.healthcheckers"
+
+for file in $TMPFILES; do
+  test -e $file && test ! -L $file && /bin/rm $file
+done
+
+exec /usr/sbin/keepalived -n -f /etc/keepalived/keepalived.conf

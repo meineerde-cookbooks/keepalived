@@ -9,6 +9,7 @@ Usage
 ### Configuration settings
 
 * `node[:keepalived][:shared_address] = true`  # If keepalived is using a shared address
+* `node[:keepalived][:init_style] = "init"`    # Start keepalived with an `init` script or with `runit`?
 
 ### Global settings
 

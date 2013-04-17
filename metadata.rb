@@ -8,3 +8,5 @@ version           "1.0.2"
 supports          "ubuntu"
 
 recipe "keepalived", "Installs and configures keepalived"
+
+depends "runit", "~> 1.0"

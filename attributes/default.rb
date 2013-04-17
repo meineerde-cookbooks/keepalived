@@ -1,3 +1,4 @@
+default['keepalived']['init_style'] = "init" # either init or runit
 default['keepalived']['shared_address'] = false
 default['keepalived']['global']['notification_emails'] = 'admin@example.com'
 default['keepalived']['global']['notification_email_from'] = "keepalived@#{node['domain'] || 'example.com'}"
