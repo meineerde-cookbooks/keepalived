@@ -26,6 +26,13 @@ TMPFILES="/tmp/.vrrp /tmp/.healthcheckers"
 test -f $CONFIG || exit 0
 test -f $DAEMON || exit 0
 
+do_modprobe() {
+    if [ -x /sbin/modprobe -a -f /proc/modules ]
+    then
+        modprobe -q "$1" || true
+    fi
+}
+
 case "$1" in
   start)
     log_daemon_msg "Starting $DESC" "$NAME"
@@ -33,6 +40,7 @@ case "$1" in
     do
       test -e $file && test ! -L $file && rm $file
     done
+    <% if node["platform"] == "debian" && node["platform_version"].to_f < 7.0 %>do_modprobe ip_vs<% end %>
     if start-stop-daemon --start --quiet --pidfile /var/run/$NAME.pid \
       --exec $DAEMON; then
       log_end_msg 0
@@ -64,6 +72,7 @@ case "$1" in
     start-stop-daemon --stop --quiet --pidfile \
       /var/run/$NAME.pid --exec $DAEMON || true
     sleep 1
+    <% if node["platform"] == "debian" && node["platform_version"].to_f < 7.0 %>do_modprobe ip_vs<% end %>
     if start-stop-daemon --start --quiet --pidfile \
       /var/run/$NAME.pid --exec $DAEMON; then
       log_end_msg 0

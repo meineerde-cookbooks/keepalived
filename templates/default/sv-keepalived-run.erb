@@ -5,4 +5,10 @@ for file in $TMPFILES; do
   test -e $file && test ! -L $file && /bin/rm $file
 done
 
+<% if node["platform"] == "debian" && node["platform_version"].to_f < 7.0 -%>
+# Load kernel module for ipvs, required because of the yet unreleased patch in
+# http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=619415
+/sbin/modprobe -q ip_vs || true
+<%- end %>
+
 exec /usr/sbin/keepalived -n -f /etc/keepalived/keepalived.conf
