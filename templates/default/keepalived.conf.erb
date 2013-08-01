@@ -62,7 +62,7 @@ vrrp_instance <%= name.upcase %> {
   }
   <% end -%>
   virtual_ipaddress {
-    <% Array(instance['ip_addresses']).each do |address| %>
+    <% Array(instance['ip_addresses']).sort.each do |address| %>
     <%= address %>
     <% end %>
   }
