@@ -57,8 +57,12 @@ when "init"
 when "runit"
   service "keepalived_init" do
     service_name "keepalived"
-    pattern "keepalived"
-    action [:stop, :disable]
+    # Find a "normal" daemonized keepalived process.
+    # runit processes are run as children of runsv
+    status_command "pgrep -P 1 -f '^/usr/sbin/keepalived(\s+|$)'"
+    # We keep the init service enable to please dependent services in insserv
+    # Yes, I know this is braindead but it works...
+    action [:stop, :enable]
   end
 
   include_recipe "runit"
